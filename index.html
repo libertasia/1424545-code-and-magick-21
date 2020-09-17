@@ -180,18 +180,19 @@
   </div>
 </template>
 <script>
+  var FIREBALL_SPEED_LEFT = 2;
+  var FIREBALL_SPEED_RIGHT = 5;
+  var WIZARD_HEIGHT_TO_WIDTH_RATIO = 1.337;
   var fireballSize = 22;
-
-  var getFireballSpeed = function (isMovingLeft) {
-    return isMovingLeft ? 2 : 5;
-  };
-
   var wizardSpeed = 3;
-
   var wizardWidth = 70;
 
+  var getFireballSpeed = function (isMovingLeft) {
+    return isMovingLeft ? FIREBALL_SPEED_LEFT : FIREBALL_SPEED_RIGHT;
+  };
+
   var getWizardHeigh = function () {
-    return 1.337 * wizardWidth;
+    return WIZARD_HEIGHT_TO_WIDTH_RATIO * wizardWidth;
   };
 
   var getWizardX = function (gameFieldWidth) {
