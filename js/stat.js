@@ -9,6 +9,11 @@ var GAP = 10;
 var BAR_GAP = 50;
 var BAR_WIDTH = 40;
 var BAR_MAX_HEIGHT = 150;
+var TextProps = {
+  COLOR: '#000',
+  FONT: '16px PT Mono',
+  BASELINE: 'hanging'
+};
 
 
 var renderCloud = function (ctx, x, y, color) {
@@ -32,19 +37,21 @@ var getMaxElement = function (arr) {
 };
 
 var drawBar = function (ctx, x, y, name, time, maxTime) {
-  ctx.fillStyle = name === 'Вы' ? 'rgba(255, 0, 0, 1)' : `hsl(240, ${100 * Math.random()}%, 50%)`;
+  var yourColor = 'rgba(255, 0, 0, 1)';
+  var othersColor = `hsl(240, ${100 * Math.random()}%, 50%)`;
+  ctx.fillStyle = name === 'Вы' ? yourColor : othersColor;
   var height = Math.round(time / maxTime * BAR_MAX_HEIGHT);
   ctx.fillRect(x, y, BAR_WIDTH, -height);
-  ctx.fillStyle = '#000';
+  ctx.fillStyle = TextProps.COLOR;
   ctx.fillText(name, x, y + GAP);
   time = Math.round(time);
   ctx.fillText(time, x, y - height - GAP * 2);
 };
 
 var drawText = function (ctx, x, y, text) {
-  ctx.fillStyle = '#000';
-  ctx.font = '16px PT Mono';
-  ctx.textBaseline = 'hanging';
+  ctx.fillStyle = TextProps.COLOR;
+  ctx.font = TextProps.FONT;
+  ctx.textBaseline = TextProps.BASELINE;
   var lineHeight = 20;
   var lines = text.split('\n');
   var lastLineY = y;
@@ -56,17 +63,19 @@ var drawText = function (ctx, x, y, text) {
 };
 
 window.renderStatistics = function (ctx, names, times) {
+  var shadowColor = 'rgba(0, 0, 0, 0.7)';
+  var cloudColor = '#fff';
   renderCloud(
       ctx,
       CLOUD_X + GAP,
       CLOUD_Y + GAP,
-      'rgba(0, 0, 0, 0.7)'
+      shadowColor
   );
   renderCloud(
       ctx,
       CLOUD_X,
       CLOUD_Y,
-      '#fff'
+      cloudColor
   );
 
   var offsetLeft = CLOUD_X + GAP * 2;
