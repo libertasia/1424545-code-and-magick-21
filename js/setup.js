@@ -12,15 +12,6 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template')
 
 var similarListElement = document.querySelector('.setup-similar-list');
 
-var getUserDialog = function () {
-  var userDialog = document.querySelector('.setup');
-  return userDialog;
-};
-
-var showUserDialog = function () {
-  getUserDialog().classList.remove('hidden');
-};
-
 var getRandomItem = function (items) {
   return items[Math.floor(Math.random() * items.length)];
 };
@@ -75,10 +66,13 @@ var drawWizards = function () {
   similarListElement.appendChild(renderWizards(getAllWizards()));
 };
 
-var showMoreWizards = function () {
-  showUserDialog();
-  getUserDialog().querySelector('.setup-similar').classList.remove('hidden');
+var showSetupPopup = function () {
+  var userDialog = document.querySelector('.setup');
+  var setupSimilar = userDialog.querySelector('.setup-similar');
+
+  userDialog.classList.remove('hidden');
+  setupSimilar.classList.remove('hidden');
 };
 
 drawWizards();
-showMoreWizards();
+showSetupPopup();
