@@ -1,16 +1,30 @@
 /* eslint-disable no-var */
 'use strict';
 
-var WIZARD_FIRST_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var WIZARD_LAST_NAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var WIZARD_COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+var WIZARD_FIRST_NAMES = [`Иван`, `Хуан Себастьян`, `Мария`, `Кристоф`, `Виктор`, `Юлия`, `Люпита`, `Вашингтон`];
+var WIZARD_LAST_NAMES = [`да Марья`, `Верон`, `Мирабелла`, `Вальц`, `Онопко`, `Топольницкая`, `Нионго`, `Ирвинг`];
+var WIZARD_COAT_COLORS = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 161)`, `rgb(56, 159, 117)`, `rgb(215, 210, 55)`, `rgb(0, 0, 0)`];
+var WIZARD_EYES_COLORS = [`black`, `red`, `blue`, `yellow`, `green`];
+var WIZARD_FIREBALL_COLORS = [`#ee4830`, `#30a8ee`, `#5ce6c0`, `#e848d5`, `#e6e848`];
+var MIN_NAME_LENGTH = 2;
+var MAX_NAME_LENGTH = 25;
 
-var similarWizardTemplate = document.querySelector('#similar-wizard-template')
+var similarWizardTemplate = document.querySelector(`#similar-wizard-template`)
   .content
-  .querySelector('.setup-similar-item');
+  .querySelector(`.setup-similar-item`);
 
-var similarListElement = document.querySelector('.setup-similar-list');
+var similarListElement = document.querySelector(`.setup-similar-list`);
+
+var setupOpen = document.querySelector(`.setup-open`);
+var setup = document.querySelector(`.setup`);
+var setupClose = setup.querySelector(`.setup-close`);
+var setupUserName = setup.querySelector(`.setup-user-name`);
+var setupWizardCoat = setup.querySelector(`.setup-wizard .wizard-coat`);
+var setupWizardCoatInput = setup.querySelector(`input[name="coat-color"]`);
+var setupWizardEyes = setup.querySelector(`.setup-wizard .wizard-eyes`);
+var setupWizardEyesInput = setup.querySelector(`input[name="eyes-color"]`);
+var setupFireballColor = setup.querySelector(`.setup-fireball-wrap`);
+var setupFireballColorInput = setup.querySelector(`input[name="fireball-color"]`);
 
 var getRandomItem = function (items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -49,9 +63,9 @@ var getAllWizards = function () {
 var renderWizard = function (wizard) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
 
-  wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+  wizardElement.querySelector(`.setup-similar-label`).textContent = wizard.name;
+  wizardElement.querySelector(`.wizard-coat`).style.fill = wizard.coatColor;
+  wizardElement.querySelector(`.wizard-eyes`).style.fill = wizard.eyesColor;
 
   return wizardElement;
 };
@@ -67,12 +81,119 @@ var drawWizards = function () {
 };
 
 var showSetupPopup = function () {
-  var userDialog = document.querySelector('.setup');
-  var setupSimilar = userDialog.querySelector('.setup-similar');
+  var userDialog = document.querySelector(`.setup`);
+  var setupSimilar = userDialog.querySelector(`.setup-similar`);
 
-  userDialog.classList.remove('hidden');
-  setupSimilar.classList.remove('hidden');
+  userDialog.classList.remove(`hidden`);
+  setupSimilar.classList.remove(`hidden`);
 };
 
 drawWizards();
 showSetupPopup();
+
+// 4.10 Учебный проект: одеть Надежду.
+// Открытие/закрытие окна настройки персонажа:
+
+var onPopupEscPress = function (evt) {
+  if (evt.key === `Escape` && document.activeElement !== setupUserName) {
+    evt.preventDefault();
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  setup.classList.remove(`hidden`);
+
+  document.addEventListener(`keydown`, onPopupEscPress);
+};
+
+var closePopup = function () {
+  setup.classList.add(`hidden`);
+
+  document.removeEventListener(`keydown`, onPopupEscPress);
+};
+
+setupOpen.addEventListener(`click`, function () {
+  openPopup();
+});
+
+setupOpen.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    openPopup();
+  }
+});
+
+setupClose.addEventListener(`click`, function () {
+  closePopup();
+});
+
+setupClose.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    closePopup();
+  }
+});
+
+// Валидация ввода имени персонажа:
+
+setupUserName.addEventListener(`invalid`, function () {
+  if (setupUserName.validity.tooShort) {
+    setupUserName.setCustomValidity(`Имя должно состоять минимум из 2-х символов`);
+  } else if (setupUserName.validity.tooLong) {
+    setupUserName.setCustomValidity(`Имя не должно превышать 25-ти символов`);
+  } else if (setupUserName.validity.valueMissing) {
+    setupUserName.setCustomValidity(`Обязательное поле`);
+  } else {
+    setupUserName.setCustomValidity(``);
+  }
+});
+
+setupUserName.addEventListener(`input`, function () {
+  var valueLength = setupUserName.value.length;
+
+  if (valueLength < MIN_NAME_LENGTH) {
+    setupUserName.setCustomValidity(`Ещё ` + (MIN_NAME_LENGTH - valueLength) + ` симв.`);
+  } else if (valueLength > MAX_NAME_LENGTH) {
+    setupUserName.setCustomValidity(`Удалите лишние ` + (valueLength - MAX_NAME_LENGTH) + ` симв.`);
+  } else {
+    setupUserName.setCustomValidity(``);
+  }
+
+  setupUserName.reportValidity();
+});
+
+// Изменение цвета мантии персонажа по нажатию:
+
+var changeCoatColor = function () {
+  setupWizardCoat.style.fill = getCoatColor();
+  setupWizardCoatInput.value = getCoatColor();
+};
+
+setupWizardCoat.addEventListener(`click`, function () {
+  changeCoatColor();
+});
+
+// Изменение цвета глаз персонажа по нажатию:
+
+var changeEyesColor = function () {
+  setupWizardEyes.style.fill = getEyesColor();
+  setupWizardEyesInput.value = getEyesColor();
+};
+
+setupWizardEyes.addEventListener(`click`, function () {
+  changeEyesColor();
+});
+
+// Изменение цвета фаерболов по нажатию:
+
+var getFireballColor = function () {
+  return getRandomItem(WIZARD_FIREBALL_COLORS);
+};
+
+var changeFireballColor = function () {
+  setupFireballColor.style.backgroundColor = getFireballColor();
+  setupFireballColorInput.value = getFireballColor();
+};
+
+setupFireballColor.addEventListener(`click`, function () {
+  changeFireballColor();
+});
