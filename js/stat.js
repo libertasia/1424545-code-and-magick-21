@@ -1,8 +1,8 @@
 /* eslint-disable no-var */
 'use strict';
 
-var SHADOW_COLOR = 'rgba(0, 0, 0, 0.7)';
-var CLOUD_COLOR = '#fff';
+var SHADOW_COLOR = `rgba(0, 0, 0, 0.7)`;
+var CLOUD_COLOR = `#fff`;
 var CLOUD_WIDTH = 420;
 var CLOUD_HEIGHT = 270;
 var CLOUD_X = 100;
@@ -17,9 +17,9 @@ var BAR_GAP = 50;
 var BAR_WIDTH = 40;
 var BAR_MAX_HEIGHT = 150;
 var TextProps = {
-  COLOR: '#000',
-  FONT: '16px PT Mono',
-  BASELINE: 'hanging'
+  COLOR: `#000`,
+  FONT: `16px PT Mono`,
+  BASELINE: `hanging`
 };
 
 var drawRectangle = function (ctx, x, y, width, height, color) {
@@ -44,9 +44,9 @@ var getBarHeight = function (time, maxTime) {
 };
 
 var getBarColor = function (name) {
-  var yourColor = 'rgba(255, 0, 0, 1)';
+  var yourColor = `rgba(255, 0, 0, 1)`;
   var othersColor = `hsl(240, ${100 * Math.random()}%, 50%)`;
-  return name === 'Вы' ? yourColor : othersColor;
+  return name === `Вы` ? yourColor : othersColor;
 };
 
 var drawBar = function (ctx, x, y, height, color) {
@@ -69,7 +69,7 @@ var drawText = function (ctx, x, y, text) {
   ctx.fillStyle = TextProps.COLOR;
   ctx.font = TextProps.FONT;
   ctx.textBaseline = TextProps.BASELINE;
-  var lines = text.split('\n');
+  var lines = text.split(`\n`);
   var lastLineY = y;
   for (var i = 0; i < lines.length; i++) {
     lastLineY = y + (i * LINE_HEIGHT);
@@ -90,12 +90,12 @@ var drawResult = function (ctx, x, y, name, time, maxTime) {
 };
 
 var getTextHeight = function (text) {
-  var lines = text.split('\n');
+  var lines = text.split(`\n`);
   return lines.length * LINE_HEIGHT;
 };
 
 window.renderStatistics = function (ctx, names, times) {
-  var text = 'Ура вы победили!\nСписок результатов:';
+  var text = `Ура вы победили!\nСписок результатов:`;
 
   drawCloudShadow(ctx, SHADOW_X, SHADOW_Y);
   drawCloud(ctx, CLOUD_X, CLOUD_Y);
