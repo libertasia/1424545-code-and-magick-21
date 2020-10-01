@@ -150,9 +150,7 @@ setupClose.addEventListener(`click`, function () {
 });
 
 setupClose.addEventListener(`keydown`, function (evt) {
-  if (evt.key === Key.ENTER) {
-    closePopup();
-  }
+  keyboard.doIfEnterEvent(evt, closePopup);
 });
 
 // Валидация ввода имени персонажа:
