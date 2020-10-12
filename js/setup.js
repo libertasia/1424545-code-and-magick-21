@@ -16,16 +16,18 @@
   var similarListElement = document.querySelector(`.setup-similar-list`);
 
 
-  var setup = document.querySelector(`.setup`);
-  var setupWizardCoat = setup.querySelector(`.setup-wizard .wizard-coat`);
-  var setupWizardCoatInput = setup.querySelector(`input[name="coat-color"]`);
-  var setupWizardEyes = setup.querySelector(`.setup-wizard .wizard-eyes`);
-  var setupWizardEyesInput = setup.querySelector(`input[name="eyes-color"]`);
-  var setupFireballColor = setup.querySelector(`.setup-fireball-wrap`);
-  var setupFireballColorInput = setup.querySelector(`input[name="fireball-color"]`);
+  var setupForm = document.querySelector(`.setup`);
+  var setupWizardCoat = setupForm.querySelector(`.setup-wizard .wizard-coat`);
+  var setupWizardCoatInput = setupForm.querySelector(`input[name="coat-color"]`);
+  var setupWizardEyes = setupForm.querySelector(`.setup-wizard .wizard-eyes`);
+  var setupWizardEyesInput = setupForm.querySelector(`input[name="eyes-color"]`);
+  var setupFireballColor = setupForm.querySelector(`.setup-fireball-wrap`);
+  var setupFireballColorInput = setupForm.querySelector(`input[name="fireball-color"]`);
 
   window.setup = {
-    setup
+    setupForm,
+    defaultTop: setupForm.style.top,
+    defaultLeft: setupForm.style.left
   };
 
   var getWizardName = function () {
