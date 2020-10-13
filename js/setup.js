@@ -8,6 +8,7 @@
   var WIZARD_EYES_COLORS = [`black`, `red`, `blue`, `yellow`, `green`];
   var WIZARD_FIREBALL_COLORS = [`#ee4830`, `#30a8ee`, `#5ce6c0`, `#e848d5`, `#e6e848`];
 
+  var getRandomItem = window.util.getRandomItem;
 
   var similarWizardTemplate = document.querySelector(`#similar-wizard-template`)
     .content
@@ -24,24 +25,26 @@
   var setupFireballColor = setupForm.querySelector(`.setup-fireball-wrap`);
   var setupFireballColorInput = setupForm.querySelector(`input[name="fireball-color"]`);
 
-  window.setup = {
-    setupForm,
-    defaultTop: setupForm.style.top,
-    defaultLeft: setupForm.style.left
-  };
+  var setup = {};
+
+  setup.setupForm = setupForm;
+  setup.defaultTop = setupForm.style.top;
+  setup.defaultLeft = setupForm.style.left;
+
+  window.setup = setup;
 
   var getWizardName = function () {
-    var firstName = window.random.getRandomItem(WIZARD_FIRST_NAMES);
-    var lastName = window.random.getRandomItem(WIZARD_LAST_NAMES);
+    var firstName = getRandomItem(WIZARD_FIRST_NAMES);
+    var lastName = getRandomItem(WIZARD_LAST_NAMES);
     return `${firstName} ${lastName}`;
   };
 
   var getCoatColor = function () {
-    return window.random.getRandomItem(WIZARD_COAT_COLORS);
+    return getRandomItem(WIZARD_COAT_COLORS);
   };
 
   var getEyesColor = function () {
-    return window.random.getRandomItem(WIZARD_EYES_COLORS);
+    return getRandomItem(WIZARD_EYES_COLORS);
   };
 
   var getWizard = function () {
@@ -113,7 +116,7 @@
   // Изменение цвета фаерболов по нажатию:
 
   var getFireballColor = function () {
-    return window.random.getRandomItem(WIZARD_FIREBALL_COLORS);
+    return getRandomItem(WIZARD_FIREBALL_COLORS);
   };
 
   var changeFireballColor = function () {

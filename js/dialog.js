@@ -4,33 +4,41 @@
 // Открытие/закрытие окна настройки персонажа:
 
 (function () {
-  var setupUserName = window.setup.setupForm.querySelector(`.setup-user-name`);
-  var setupOpen = document.querySelector(`.setup-open`);
-  var setupClose = window.setup.setupForm.querySelector(`.setup-close`);
-  var dialogHandle = window.setup.setupForm.querySelector(`.upload`);
+  var setupForm = window.setup.setupForm;
+  var defaultTop = window.setup.defaultTop;
+  var defaultLeft = window.setup.defaultLeft;
+  var doIfEscEvent = window.util.keyboard.doIfEscEvent;
+  var doIfEnterEvent = window.util.keyboard.doIfEnterEvent;
 
-  window.dialog = {
-    setupUserName,
-    dialogHandle
-  };
+  var setupUserName = setupForm.querySelector(`.setup-user-name`);
+  var setupOpen = document.querySelector(`.setup-open`);
+  var setupClose = setupForm.querySelector(`.setup-close`);
+  var dialogHandle = setupForm.querySelector(`.upload`);
+
+  var dialog = {};
+
+  dialog.setupUserName = setupUserName;
+  dialog.dialogHandle = dialogHandle;
+
+  window.dialog = dialog;
 
   var onPopupEscPress = function (evt) {
     if (document.activeElement !== setupUserName) {
       evt.preventDefault();
-      window.util.doIfEscEvent(evt, closePopup);
+      doIfEscEvent(evt, closePopup);
     }
   };
 
   var openPopup = function () {
-    window.setup.setupForm.classList.remove(`hidden`);
-    window.setup.setupForm.style.top = window.setup.defaultTop;
-    window.setup.setupForm.style.left = window.setup.defaultLeft;
+    setupForm.classList.remove(`hidden`);
+    setupForm.style.top = defaultTop;
+    setupForm.style.left = defaultLeft;
 
     document.addEventListener(`keydown`, onPopupEscPress);
   };
 
   var closePopup = function () {
-    window.setup.setupForm.classList.add(`hidden`);
+    setupForm.classList.add(`hidden`);
 
     document.removeEventListener(`keydown`, onPopupEscPress);
   };
@@ -40,7 +48,7 @@
   });
 
   setupOpen.addEventListener(`keydown`, function (evt) {
-    window.util.doIfEnterEvent(evt, openPopup);
+    doIfEnterEvent(evt, openPopup);
   });
 
   setupClose.addEventListener(`click`, function () {
@@ -48,7 +56,7 @@
   });
 
   setupClose.addEventListener(`keydown`, function (evt) {
-    window.util.doIfEnterEvent(evt, closePopup);
+    doIfEnterEvent(evt, closePopup);
   });
 })();
 

@@ -2,7 +2,15 @@
 'use strict';
 
 (function () {
-  window.dialog.dialogHandle.addEventListener(`mousedown`, function (evt) {
+  var dialogHandle = window.dialog.dialogHandle;
+  var setupForm = window.setup.setupForm;
+
+  var moveForm = function (shiftX, shiftY) {
+    setupForm.style.top = (setupForm.offsetTop - shiftY) + `px`;
+    setupForm.style.left = (setupForm.offsetLeft - shiftX) + `px`;
+  };
+
+  dialogHandle.addEventListener(`mousedown`, function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -12,7 +20,7 @@
 
     var dragged = false;
 
-    var onMouseMove = function (moveEvt) {
+    var onMouseMove = function (moveEvt, callback) {
       moveEvt.preventDefault();
 
       dragged = true;
@@ -27,26 +35,29 @@
         y: moveEvt.clientY
       };
 
-      window.setup.setupForm.style.top = (window.setup.setupForm.offsetTop - shift.y) + `px`;
-      window.setup.setupForm.style.left = (window.setup.setupForm.offsetLeft - shift.x) + `px`;
+      callback(shift.x, shift.y);
+    };
+
+    var onMouseMoveHandler = function (e) {
+      return onMouseMove(e, moveForm);
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      document.removeEventListener(`mousemove`, onMouseMove);
+      document.removeEventListener(`mousemove`, onMouseMoveHandler);
       document.removeEventListener(`mouseup`, onMouseUp);
 
       if (dragged) {
         var onClickPreventDefault = function (clickEvt) {
           clickEvt.preventDefault();
-          window.dialog.dialogHandle.removeEventListener(`click`, onClickPreventDefault);
+          dialogHandle.removeEventListener(`click`, onClickPreventDefault);
         };
-        window.dialog.dialogHandle.addEventListener(`click`, onClickPreventDefault);
+        dialogHandle.addEventListener(`click`, onClickPreventDefault);
       }
     };
 
-    document.addEventListener(`mousemove`, onMouseMove);
+    document.addEventListener(`mousemove`, onMouseMoveHandler);
     document.addEventListener(`mouseup`, onMouseUp);
   });
 })();

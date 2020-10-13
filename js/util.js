@@ -7,18 +7,29 @@
     ENTER: `Enter`
   };
 
-  window.util = {
-    doIfEscEvent(evt, callback) {
-      if (evt.key === Key.ESC) {
-        callback();
-      }
-    },
-    doIfEnterEvent(evt, callback) {
-      if (evt.key === Key.ENTER) {
-        callback();
-      }
+  var util = {};
+
+  var keyboard = {};
+
+  util.getRandomItem = function (items) {
+    return items[Math.floor(Math.random() * items.length)];
+  };
+
+  keyboard.doIfEscEvent = function (evt, callback) {
+    if (evt.key === Key.ESC) {
+      callback();
     }
   };
+
+  keyboard.doIfEnterEvent = function (evt, callback) {
+    if (evt.key === Key.ENTER) {
+      callback();
+    }
+  };
+
+  util.keyboard = keyboard;
+
+  window.util = util;
 })();
 
 
