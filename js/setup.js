@@ -1,213 +1,130 @@
 /* eslint-disable no-var */
 'use strict';
 
-var WIZARD_FIRST_NAMES = [`Иван`, `Хуан Себастьян`, `Мария`, `Кристоф`, `Виктор`, `Юлия`, `Люпита`, `Вашингтон`];
-var WIZARD_LAST_NAMES = [`да Марья`, `Верон`, `Мирабелла`, `Вальц`, `Онопко`, `Топольницкая`, `Нионго`, `Ирвинг`];
-var WIZARD_COAT_COLORS = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 161)`, `rgb(56, 159, 117)`, `rgb(215, 210, 55)`, `rgb(0, 0, 0)`];
-var WIZARD_EYES_COLORS = [`black`, `red`, `blue`, `yellow`, `green`];
-var WIZARD_FIREBALL_COLORS = [`#ee4830`, `#30a8ee`, `#5ce6c0`, `#e848d5`, `#e6e848`];
-var MIN_NAME_LENGTH = 2;
-var MAX_NAME_LENGTH = 25;
+(function () {
+  var WIZARD_FIRST_NAMES = [`Иван`, `Хуан Себастьян`, `Мария`, `Кристоф`, `Виктор`, `Юлия`, `Люпита`, `Вашингтон`];
+  var WIZARD_LAST_NAMES = [`да Марья`, `Верон`, `Мирабелла`, `Вальц`, `Онопко`, `Топольницкая`, `Нионго`, `Ирвинг`];
+  var WIZARD_COAT_COLORS = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 161)`, `rgb(56, 159, 117)`, `rgb(215, 210, 55)`, `rgb(0, 0, 0)`];
+  var WIZARD_EYES_COLORS = [`black`, `red`, `blue`, `yellow`, `green`];
+  var WIZARD_FIREBALL_COLORS = [`#ee4830`, `#30a8ee`, `#5ce6c0`, `#e848d5`, `#e6e848`];
 
-var Key = {
-  ESC: `Escape`,
-  ENTER: `Enter`
-};
+  var getRandomItem = window.util.getRandomItem;
 
-var InvalidMessage = {
-  REQUIRED_FIELD: `Обязательное поле`,
-  NAME_TOO_SHORT: `Имя должно состоять минимум из 2-х символов`,
-  NAME_TOO_LONG: `Имя не должно превышать 25-ти символов`
-};
+  var similarWizardTemplate = document.querySelector(`#similar-wizard-template`)
+    .content
+    .querySelector(`.setup-similar-item`);
 
-var keyboard = {
-  doIfEscEvent(evt, callback) {
-    if (evt.key === Key.ESC) {
-      callback();
-    }
-  },
-  doIfEnterEvent(evt, callback) {
-    if (evt.key === Key.ENTER) {
-      callback();
-    }
-  }
-};
+  var similarListElement = document.querySelector(`.setup-similar-list`);
 
-var similarWizardTemplate = document.querySelector(`#similar-wizard-template`)
-  .content
-  .querySelector(`.setup-similar-item`);
 
-var similarListElement = document.querySelector(`.setup-similar-list`);
+  var setupForm = document.querySelector(`.setup`);
+  var setupWizardCoat = setupForm.querySelector(`.setup-wizard .wizard-coat`);
+  var setupWizardCoatInput = setupForm.querySelector(`input[name="coat-color"]`);
+  var setupWizardEyes = setupForm.querySelector(`.setup-wizard .wizard-eyes`);
+  var setupWizardEyesInput = setupForm.querySelector(`input[name="eyes-color"]`);
+  var setupFireballColor = setupForm.querySelector(`.setup-fireball-wrap`);
+  var setupFireballColorInput = setupForm.querySelector(`input[name="fireball-color"]`);
 
-var setupOpen = document.querySelector(`.setup-open`);
-var setup = document.querySelector(`.setup`);
-var setupClose = setup.querySelector(`.setup-close`);
-var setupUserName = setup.querySelector(`.setup-user-name`);
-var setupWizardCoat = setup.querySelector(`.setup-wizard .wizard-coat`);
-var setupWizardCoatInput = setup.querySelector(`input[name="coat-color"]`);
-var setupWizardEyes = setup.querySelector(`.setup-wizard .wizard-eyes`);
-var setupWizardEyesInput = setup.querySelector(`input[name="eyes-color"]`);
-var setupFireballColor = setup.querySelector(`.setup-fireball-wrap`);
-var setupFireballColorInput = setup.querySelector(`input[name="fireball-color"]`);
+  var setup = {};
 
-var getRandomItem = function (items) {
-  return items[Math.floor(Math.random() * items.length)];
-};
+  setup.setupForm = setupForm;
+  setup.defaultTop = setupForm.style.top;
+  setup.defaultLeft = setupForm.style.left;
 
-var getWizardName = function () {
-  var firstName = getRandomItem(WIZARD_FIRST_NAMES);
-  var lastName = getRandomItem(WIZARD_LAST_NAMES);
-  return `${firstName} ${lastName}`;
-};
+  window.setup = setup;
 
-var getCoatColor = function () {
-  return getRandomItem(WIZARD_COAT_COLORS);
-};
-
-var getEyesColor = function () {
-  return getRandomItem(WIZARD_EYES_COLORS);
-};
-
-var getWizard = function () {
-  return {
-    name: getWizardName(),
-    coatColor: getCoatColor(),
-    eyesColor: getEyesColor()
+  var getWizardName = function () {
+    var firstName = getRandomItem(WIZARD_FIRST_NAMES);
+    var lastName = getRandomItem(WIZARD_LAST_NAMES);
+    return `${firstName} ${lastName}`;
   };
-};
 
-var getAllWizards = function () {
-  var allWizards = [];
-  for (var i = 0; i < 4; i++) {
-    allWizards.push(getWizard());
-  }
-  return allWizards;
-};
+  var getCoatColor = function () {
+    return getRandomItem(WIZARD_COAT_COLORS);
+  };
 
-var renderWizard = function (wizard) {
-  var wizardElement = similarWizardTemplate.cloneNode(true);
+  var getEyesColor = function () {
+    return getRandomItem(WIZARD_EYES_COLORS);
+  };
 
-  wizardElement.querySelector(`.setup-similar-label`).textContent = wizard.name;
-  wizardElement.querySelector(`.wizard-coat`).style.fill = wizard.coatColor;
-  wizardElement.querySelector(`.wizard-eyes`).style.fill = wizard.eyesColor;
+  var getWizard = function () {
+    return {
+      name: getWizardName(),
+      coatColor: getCoatColor(),
+      eyesColor: getEyesColor()
+    };
+  };
 
-  return wizardElement;
-};
+  var getAllWizards = function () {
+    var allWizards = [];
+    for (var i = 0; i < 4; i++) {
+      allWizards.push(getWizard());
+    }
+    return allWizards;
+  };
 
-var renderWizards = function (wizards) {
-  var fragment = document.createDocumentFragment();
-  wizards.forEach((wizard) => fragment.appendChild(renderWizard(wizard)));
-  return fragment;
-};
+  var renderWizard = function (wizard) {
+    var wizardElement = similarWizardTemplate.cloneNode(true);
 
-var drawWizards = function () {
-  similarListElement.appendChild(renderWizards(getAllWizards()));
-};
+    wizardElement.querySelector(`.setup-similar-label`).textContent = wizard.name;
+    wizardElement.querySelector(`.wizard-coat`).style.fill = wizard.coatColor;
+    wizardElement.querySelector(`.wizard-eyes`).style.fill = wizard.eyesColor;
 
-var showSetupPopup = function () {
-  var userDialog = document.querySelector(`.setup`);
-  var setupSimilar = userDialog.querySelector(`.setup-similar`);
+    return wizardElement;
+  };
 
-  userDialog.classList.remove(`hidden`);
-  setupSimilar.classList.remove(`hidden`);
-};
+  var renderWizards = function (wizards) {
+    var fragment = document.createDocumentFragment();
+    wizards.forEach((wizard) => fragment.appendChild(renderWizard(wizard)));
+    return fragment;
+  };
 
-drawWizards();
-showSetupPopup();
+  var drawWizards = function () {
+    similarListElement.appendChild(renderWizards(getAllWizards()));
+  };
 
-// 4.10 Учебный проект: одеть Надежду.
-// Открытие/закрытие окна настройки персонажа:
+  var showSetupPopup = function () {
+    var userDialog = document.querySelector(`.setup`);
+    var setupSimilar = userDialog.querySelector(`.setup-similar`);
 
-var onPopupEscPress = function (evt) {
-  if (document.activeElement !== setupUserName) {
-    evt.preventDefault();
-    keyboard.doIfEscEvent(evt, closePopup);
-  }
-};
+    userDialog.classList.remove(`hidden`);
+    setupSimilar.classList.remove(`hidden`);
+  };
 
-var openPopup = function () {
-  setup.classList.remove(`hidden`);
+  drawWizards();
+  showSetupPopup();
 
-  document.addEventListener(`keydown`, onPopupEscPress);
-};
 
-var closePopup = function () {
-  setup.classList.add(`hidden`);
+  // Изменение цвета мантии персонажа по нажатию:
 
-  document.removeEventListener(`keydown`, onPopupEscPress);
-};
+  var changeCoatColor = function () {
+    setupWizardCoat.style.fill = getCoatColor();
+    setupWizardCoatInput.value = getCoatColor();
+  };
 
-setupOpen.addEventListener(`click`, function () {
-  openPopup();
-});
+  setupWizardCoat.addEventListener(`click`, changeCoatColor);
 
-setupOpen.addEventListener(`keydown`, function (evt) {
-  keyboard.doIfEnterEvent(evt, openPopup);
-});
+  // Изменение цвета глаз персонажа по нажатию:
 
-setupClose.addEventListener(`click`, function () {
-  closePopup();
-});
+  var changeEyesColor = function () {
+    setupWizardEyes.style.fill = getEyesColor();
+    setupWizardEyesInput.value = getEyesColor();
+  };
 
-setupClose.addEventListener(`keydown`, function (evt) {
-  keyboard.doIfEnterEvent(evt, closePopup);
-});
+  setupWizardEyes.addEventListener(`click`, changeEyesColor);
 
-// Валидация ввода имени персонажа:
+  // Изменение цвета фаерболов по нажатию:
 
-setupUserName.addEventListener(`invalid`, function () {
-  if (setupUserName.validity.tooShort) {
-    setupUserName.setCustomValidity(InvalidMessage.NAME_TOO_SHORT);
-  } else if (setupUserName.validity.tooLong) {
-    setupUserName.setCustomValidity(InvalidMessage.NAME_TOO_LONG);
-  } else if (setupUserName.validity.valueMissing) {
-    setupUserName.setCustomValidity(InvalidMessage.REQUIRED_FIELD);
-  } else {
-    setupUserName.setCustomValidity(``);
-  }
-});
+  var getFireballColor = function () {
+    return getRandomItem(WIZARD_FIREBALL_COLORS);
+  };
 
-setupUserName.addEventListener(`input`, function (evt) {
-  var valueLength = evt.target.value.length;
+  var changeFireballColor = function () {
+    setupFireballColor.style.backgroundColor = getFireballColor();
+    setupFireballColorInput.value = getFireballColor();
+  };
 
-  if (valueLength < MIN_NAME_LENGTH) {
-    setupUserName.setCustomValidity(`Ещё ` + (MIN_NAME_LENGTH - valueLength) + ` симв.`);
-  } else if (valueLength > MAX_NAME_LENGTH) {
-    setupUserName.setCustomValidity(`Удалите лишние ` + (valueLength - MAX_NAME_LENGTH) + ` симв.`);
-  } else {
-    setupUserName.setCustomValidity(``);
-  }
+  setupFireballColor.addEventListener(`click`, changeFireballColor);
 
-  setupUserName.reportValidity();
-});
+})();
 
-// Изменение цвета мантии персонажа по нажатию:
-
-var changeCoatColor = function () {
-  setupWizardCoat.style.fill = getCoatColor();
-  setupWizardCoatInput.value = getCoatColor();
-};
-
-setupWizardCoat.addEventListener(`click`, changeCoatColor);
-
-// Изменение цвета глаз персонажа по нажатию:
-
-var changeEyesColor = function () {
-  setupWizardEyes.style.fill = getEyesColor();
-  setupWizardEyesInput.value = getEyesColor();
-};
-
-setupWizardEyes.addEventListener(`click`, changeEyesColor);
-
-// Изменение цвета фаерболов по нажатию:
-
-var getFireballColor = function () {
-  return getRandomItem(WIZARD_FIREBALL_COLORS);
-};
-
-var changeFireballColor = function () {
-  setupFireballColor.style.backgroundColor = getFireballColor();
-  setupFireballColorInput.value = getFireballColor();
-};
-
-setupFireballColor.addEventListener(`click`, changeFireballColor);
