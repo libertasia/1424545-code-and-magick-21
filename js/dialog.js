@@ -1,7 +1,7 @@
 /* eslint-disable no-var */
 'use strict';
 
-// Открытие/закрытие окна настройки персонажа:
+// Открытие/закрытие окна настройки персонажа, перемещение диалога:
 
 (function () {
   var setupForm = window.setup.setupForm;
@@ -9,11 +9,12 @@
   var defaultLeft = window.setup.defaultLeft;
   var doIfEscEvent = window.util.keyboard.doIfEscEvent;
   var doIfEnterEvent = window.util.keyboard.doIfEnterEvent;
+  var dialogHandle = window.move.dialogHandle;
+  var initDialogMove = window.move.initDialogMove;
 
   var setupUserName = setupForm.querySelector(`.setup-user-name`);
   var setupOpen = document.querySelector(`.setup-open`);
   var setupClose = setupForm.querySelector(`.setup-close`);
-  var dialogHandle = setupForm.querySelector(`.upload`);
 
   var dialog = {};
 
@@ -58,6 +59,13 @@
   setupClose.addEventListener(`keydown`, function (evt) {
     doIfEnterEvent(evt, closePopup);
   });
+
+  var moveForm = function (shift) {
+    setupForm.style.top = (setupForm.offsetTop - shift.y) + `px`;
+    setupForm.style.left = (setupForm.offsetLeft - shift.x) + `px`;
+  };
+
+  initDialogMove(moveForm);
 })();
 
 
