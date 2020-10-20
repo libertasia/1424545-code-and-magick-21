@@ -2,8 +2,6 @@
 'use strict';
 
 (function () {
-  // var WIZARD_FIRST_NAMES = [`Иван`, `Хуан Себастьян`, `Мария`, `Кристоф`, `Виктор`, `Юлия`, `Люпита`, `Вашингтон`];
-  // var WIZARD_LAST_NAMES = [`да Марья`, `Верон`, `Мирабелла`, `Вальц`, `Онопко`, `Топольницкая`, `Нионго`, `Ирвинг`];
   var WIZARD_COAT_COLORS = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 161)`, `rgb(56, 159, 117)`, `rgb(215, 210, 55)`, `rgb(0, 0, 0)`];
   var WIZARD_EYES_COLORS = [`black`, `red`, `blue`, `yellow`, `green`];
   var WIZARD_FIREBALL_COLORS = [`#ee4830`, `#30a8ee`, `#5ce6c0`, `#e848d5`, `#e6e848`];
@@ -39,12 +37,6 @@
 
   window.setup = setup;
 
-  // var getWizardName = function () {
-  //   var firstName = getRandomItem(WIZARD_FIRST_NAMES);
-  //   var lastName = getRandomItem(WIZARD_LAST_NAMES);
-  //   return `${firstName} ${lastName}`;
-  // };
-
   var getCoatColor = function () {
     return getRandomItem(WIZARD_COAT_COLORS);
   };
@@ -52,22 +44,6 @@
   var getEyesColor = function () {
     return getRandomItem(WIZARD_EYES_COLORS);
   };
-
-  // var getWizard = function () {
-  //   return {
-  //     name: getWizardName(),
-  //     coatColor: getCoatColor(),
-  //     eyesColor: getEyesColor()
-  //   };
-  // };
-
-  // var getAllWizards = function () {
-  //   var allWizards = [];
-  //   for (var i = 0; i < 4; i++) {
-  //     allWizards.push(getWizard());
-  //   }
-  //   return allWizards;
-  // };
 
   var renderWizard = function (wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
@@ -79,19 +55,7 @@
     return wizardElement;
   };
 
-  // var renderWizards = function (wizards) {
-  //   var fragment = document.createDocumentFragment();
-  //   wizards.forEach((wizard) => fragment.appendChild(renderWizard(wizard)));
-  //   return fragment;
-  // };
-
-  // var drawWizards = function () {
-  //   similarListElement.appendChild(backendLoad(getAllWizards()));
-  // };
-
-  // drawWizards();
-
-  var successHandler = function (wizards) {
+  var onLoadCallback = function (wizards) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < MAX_SIMILAR_WIZARD_COUNT; i++) {
@@ -100,26 +64,18 @@
     similarListElement.appendChild(fragment);
   };
 
-  var errorHandler = function (errorMessage) {
+  var onErrorCallback = function (errorMessage) {
     var node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
-    node.style.position = `absolute`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `30px`;
+    node.classList.add(`error-message`);
 
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  backendLoad(successHandler, errorHandler);
-
   var showSetupPopup = function () {
     setupFormContainer.classList.remove(`hidden`);
     setupSimilar.classList.remove(`hidden`);
   };
-
-  showSetupPopup();
 
 
   // Изменение цвета мантии персонажа по нажатию:
@@ -129,16 +85,12 @@
     setupWizardCoatInput.value = getCoatColor();
   };
 
-  setupWizardCoat.addEventListener(`click`, changeCoatColor);
-
   // Изменение цвета глаз персонажа по нажатию:
 
   var changeEyesColor = function () {
     setupWizardEyes.style.fill = getEyesColor();
     setupWizardEyesInput.value = getEyesColor();
   };
-
-  setupWizardEyes.addEventListener(`click`, changeEyesColor);
 
   // Изменение цвета фаерболов по нажатию:
 
@@ -151,28 +103,26 @@
     setupFireballColorInput.value = getFireballColor();
   };
 
-  setupFireballColor.addEventListener(`click`, changeFireballColor);
+  // Отправка формы:
 
-
-  // setupFormContainer.addEventListener(`submit`, function (evt) {
-  //   backendSave(new FormData(setupFormContainer), function () {
-  //     userDialog.classList.add(`hidden`);
-  //   });
-  //   evt.preventDefault();
-  // });
-
-  var submitHandler = function (evt) {
-    backendSave(
-        new FormData(setupForm),
-        function (_response) {
-          setupFormContainer.classList.add(`hidden`);
-        },
-        errorHandler
-    );
-    evt.preventDefault();
+  var onUploadCallback = function () {
+    setupFormContainer.classList.add(`hidden`);
   };
 
-  setupForm.addEventListener(`submit`, submitHandler);
+  var onSetupFormUpload = function (evt) {
+    evt.preventDefault();
+    var formData = new FormData(setupForm);
+    backendSave(formData, onUploadCallback, onErrorCallback);
+  };
 
+  setupWizardCoat.addEventListener(`click`, changeCoatColor);
+  setupWizardEyes.addEventListener(`click`, changeEyesColor);
+  setupFireballColor.addEventListener(`click`, changeFireballColor);
+
+  backendLoad(onLoadCallback, onErrorCallback);
+
+  showSetupPopup();
+
+  setupForm.addEventListener(`submit`, onSetupFormUpload);
 })();
 
