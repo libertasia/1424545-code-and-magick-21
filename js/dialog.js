@@ -4,7 +4,7 @@
 // Открытие/закрытие окна настройки персонажа, перемещение диалога:
 
 (function () {
-  var setupForm = window.setup.setupForm;
+  var setupFormContainer = window.setup.setupFormContainer;
   var defaultTop = window.setup.defaultTop;
   var defaultLeft = window.setup.defaultLeft;
   var doIfEscEvent = window.util.keyboard.doIfEscEvent;
@@ -12,9 +12,9 @@
   var dialogHandle = window.move.dialogHandle;
   var initDialogMove = window.move.initDialogMove;
 
-  var setupUserName = setupForm.querySelector(`.setup-user-name`);
+  var setupUserName = setupFormContainer.querySelector(`.setup-user-name`);
   var setupOpen = document.querySelector(`.setup-open`);
-  var setupClose = setupForm.querySelector(`.setup-close`);
+  var setupClose = setupFormContainer.querySelector(`.setup-close`);
 
   var dialog = {};
 
@@ -31,15 +31,15 @@
   };
 
   var openPopup = function () {
-    setupForm.classList.remove(`hidden`);
-    setupForm.style.top = defaultTop;
-    setupForm.style.left = defaultLeft;
+    setupFormContainer.classList.remove(`hidden`);
+    setupFormContainer.style.top = defaultTop;
+    setupFormContainer.style.left = defaultLeft;
 
     document.addEventListener(`keydown`, onPopupEscPress);
   };
 
   var closePopup = function () {
-    setupForm.classList.add(`hidden`);
+    setupFormContainer.classList.add(`hidden`);
 
     document.removeEventListener(`keydown`, onPopupEscPress);
   };
@@ -61,8 +61,8 @@
   });
 
   var moveForm = function (shift) {
-    setupForm.style.top = (setupForm.offsetTop - shift.y) + `px`;
-    setupForm.style.left = (setupForm.offsetLeft - shift.x) + `px`;
+    setupFormContainer.style.top = (setupFormContainer.offsetTop - shift.y) + `px`;
+    setupFormContainer.style.left = (setupFormContainer.offsetLeft - shift.x) + `px`;
   };
 
   initDialogMove(moveForm);
