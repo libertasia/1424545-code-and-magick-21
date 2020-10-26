@@ -30,36 +30,37 @@
       return 1;
     } else if (left < right) {
       return -1;
-    } else {
-      return 0;
     }
+
+    return 0;
   };
 
-  var updateWizards = function () {
-    renderWizards(wizards.sort(function (left, right) {
+  var sortWizards = function (wizardsArray) {
+    var sortedWizards = wizardsArray.sort(function (left, right) {
       var rankDiff = getRank(right) - getRank(left);
       if (rankDiff === 0) {
         rankDiff = namesComparator(left.name, right.name);
       }
       return rankDiff;
-    }));
+    });
+    return sortedWizards;
   };
 
   onEyesChange(window.debounce(function (color) {
     eyesColor = color;
-    updateWizards();
+    renderWizards(sortWizards(wizards));
   })
   );
 
   onCoatChange(window.debounce(function (color) {
     coatColor = color;
-    updateWizards();
+    renderWizards(sortWizards(wizards));
   })
   );
 
   var onLoadCallback = function (data) {
-    wizards = data;
-    updateWizards();
+    wizards = data.slice(0);
+    renderWizards(sortWizards(wizards));
   };
 
   backendLoad(onLoadCallback, onErrorCallback);

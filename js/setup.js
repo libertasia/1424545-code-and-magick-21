@@ -52,7 +52,7 @@
 
     wizardElement.querySelector(`.setup-similar-label`).textContent = wizardEl.name;
     wizardElement.querySelector(`.wizard-coat`).style.fill = wizardEl.colorCoat;
-    wizardElement.querySelector(`.wizard-eyes`).style.fill = wizardEl.eyesColor;
+    wizardElement.querySelector(`.wizard-eyes`).style.fill = wizardEl.colorEyes;
 
     return wizardElement;
   };
