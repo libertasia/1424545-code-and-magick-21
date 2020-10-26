@@ -14,6 +14,14 @@
 
   var backend = {};
 
+  backend.onErrorCallback = function (errorMessage) {
+    var node = document.createElement(`div`);
+    node.classList.add(`error-message`);
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement(`afterbegin`, node);
+  };
+
   var createRequestObject = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
