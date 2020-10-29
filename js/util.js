@@ -1,35 +1,34 @@
 /* eslint-disable no-var */
 'use strict';
 
-(function () {
-  var Key = {
-    ESC: `Escape`,
-    ENTER: `Enter`
-  };
+var Key = {
+  ESC: `Escape`,
+  ENTER: `Enter`
+};
 
-  var util = {};
+var util = {};
 
-  var keyboard = {};
+var keyboard = {};
 
-  util.getRandomItem = function (items) {
-    return items[Math.floor(Math.random() * items.length)];
-  };
+util.getRandomItem = function (items) {
+  return items[Math.floor(Math.random() * items.length)];
+};
 
-  keyboard.doIfEscEvent = function (evt, callback) {
-    if (evt.key === Key.ESC) {
-      callback();
-    }
-  };
+keyboard.doIfEscEvent = function (evt, callback) {
+  if (evt.key === Key.ESC) {
+    callback();
+  }
+};
 
-  keyboard.doIfEnterEvent = function (evt, callback) {
-    if (evt.key === Key.ENTER) {
-      callback();
-    }
-  };
+keyboard.doIfEnterEvent = function (evt, callback) {
+  if (evt.key === Key.ENTER) {
+    callback();
+  }
+};
 
-  util.keyboard = keyboard;
+util.keyboard = keyboard;
 
-  window.util = util;
-})();
+window.util = util;
+
 
 
