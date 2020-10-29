@@ -29,6 +29,3 @@ keyboard.doIfEnterEvent = function (evt, callback) {
 util.keyboard = keyboard;
 
 window.util = util;
-
-
-

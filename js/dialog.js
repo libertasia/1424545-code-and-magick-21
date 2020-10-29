@@ -65,6 +65,3 @@ var moveForm = function (shift) {
 };
 
 initDialogMove(moveForm);
-
-
-
