@@ -8,6 +8,7 @@ module.exports = {
     "./js/stat.js",
     "./js/backend.js",
     "./js/setup.js",
+    "./js/avatar.js",
     "./js/sort.js",
     "./js/move.js",
     "./js/dialog.js",
